@@ -1,5 +1,5 @@
-pub(crate) mod ctx;
-pub(crate) mod rustproto_proto;
+pub mod ctx;
+pub mod rustproto_proto;
 
 use std::fmt;
 use std::ops::Deref;
@@ -44,14 +44,14 @@ pub trait CustomizeCallback: 'static {
     }
 }
 
-pub(crate) struct CustomizeCallbackDefault;
+pub struct CustomizeCallbackDefault;
 impl CustomizeCallback for CustomizeCallbackDefault {}
 
 #[derive(Clone)]
-pub(crate) struct CustomizeCallbackHolder(pub(crate) Rc<dyn CustomizeCallback>);
+pub struct CustomizeCallbackHolder(pub Rc<dyn CustomizeCallback>);
 
 impl CustomizeCallbackHolder {
-    pub(crate) fn new(callback: impl CustomizeCallback) -> CustomizeCallbackHolder {
+    pub fn new(callback: impl CustomizeCallback) -> CustomizeCallbackHolder {
         CustomizeCallbackHolder(Rc::new(callback))
     }
 }
@@ -89,30 +89,30 @@ impl fmt::Debug for CustomizeCallbackHolder {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Customize {
     /// Code to insert before the element in the generated file.
-    pub(crate) before: Option<String>,
+    pub before: Option<String>,
     /// When false, `get_`, `set_`, `mut_` etc. accessors are not generated
-    pub(crate) generate_accessors: Option<bool>,
+    pub generate_accessors: Option<bool>,
     /// When false, `get_` is not generated even if `syntax = "proto2"`
-    pub(crate) generate_getter: Option<bool>,
+    pub generate_getter: Option<bool>,
     /// Use `bytes::Bytes` for `bytes` fields
-    pub(crate) tokio_bytes: Option<bool>,
+    pub tokio_bytes: Option<bool>,
     /// Use `bytes::Bytes` for `string` fields
-    pub(crate) tokio_bytes_for_string: Option<bool>,
+    pub tokio_bytes_for_string: Option<bool>,
     /// Enable lite runtime.
-    pub(crate) lite_runtime: Option<bool>,
+    pub lite_runtime: Option<bool>,
     /// Generate `mod.rs` in the output directory.
     ///
     /// This option allows inclusion of generated files from cargo output directory.
     ///
     /// This option will likely be on by default in rust-protobuf version 3.
-    pub(crate) gen_mod_rs: Option<bool>,
+    pub gen_mod_rs: Option<bool>,
     /// Used internally to generate protos bundled in protobuf crate
     /// like `descriptor.proto`
-    pub(crate) inside_protobuf: Option<bool>,
+    pub inside_protobuf: Option<bool>,
 }
 
 #[derive(Debug, thiserror::Error)]
-pub(crate) enum CustomizeParseParameterError {
+pub enum CustomizeParseParameterError {
     #[error("Cannot parse bool option value: {:?}", .0)]
     CannotParseBool(String),
     #[error("Unknown option name: {:?}", .0)]

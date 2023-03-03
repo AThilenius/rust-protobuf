@@ -12,7 +12,7 @@ pub enum OptionKind {
 }
 
 impl OptionKind {
-    pub(crate) fn wrap_element(&self, element_type: RustType) -> RustType {
+    pub fn wrap_element(&self, element_type: RustType) -> RustType {
         let element_type = Box::new(element_type);
         match self {
             OptionKind::Option => RustType::Option(element_type),
@@ -21,7 +21,7 @@ impl OptionKind {
     }
 
     // Type of `as_ref()` operation
-    pub(crate) fn as_ref_type(&self, element_type: RustType) -> RustType {
+    pub fn as_ref_type(&self, element_type: RustType) -> RustType {
         match self {
             OptionKind::Option => RustType::Option(Box::new(element_type.ref_type())),
             OptionKind::MessageField => RustType::MessageField(Box::new(element_type.ref_type())),
@@ -34,19 +34,19 @@ impl OptionKind {
         }
     }
 
-    pub(crate) fn unwrap_or_else(&self, what: &str, default_value: &str) -> String {
+    pub fn unwrap_or_else(&self, what: &str, default_value: &str) -> String {
         match self {
             _ => format!("{}.unwrap_or_else(|| {})", what, default_value),
         }
     }
 
-    pub(crate) fn unwrap_ref_or_else(&self, what: &str, default_value: &str) -> String {
+    pub fn unwrap_ref_or_else(&self, what: &str, default_value: &str) -> String {
         match self {
             _ => format!("{}.unwrap_or_else(|| {})", what, default_value),
         }
     }
 
-    pub(crate) fn wrap_value(&self, value: &str, customize: &Customize) -> String {
+    pub fn wrap_value(&self, value: &str, customize: &Customize) -> String {
         match self {
             OptionKind::Option => format!("::std::option::Option::Some({})", value),
             OptionKind::MessageField => format!(

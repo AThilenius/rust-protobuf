@@ -19,12 +19,12 @@ use crate::gen::scope::FileScope;
 use crate::gen::scope::RootScope;
 use crate::proto_name_to_rs;
 
-pub(crate) struct GenFileResult {
-    pub(crate) compiler_plugin_result: compiler_plugin::GenResult,
-    pub(crate) mod_name: String,
+pub struct GenFileResult {
+    pub compiler_plugin_result: compiler_plugin::GenResult,
+    pub mod_name: String,
 }
 
-pub(crate) fn gen_file(
+pub fn gen_file(
     file_descriptor: &FileDescriptor,
     _files_map: &HashMap<&ProtoPath, &FileDescriptor>,
     root_scope: &RootScope,

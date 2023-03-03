@@ -6,7 +6,7 @@ use crate::compiler_plugin;
 use crate::gen::code_writer::CodeWriter;
 use crate::gen::paths::proto_path_to_rust_mod;
 
-pub(crate) static WELL_KNOWN_TYPES_PROTO_FILE_NAMES: &[&str] = &[
+pub static WELL_KNOWN_TYPES_PROTO_FILE_NAMES: &[&str] = &[
     "any.proto",
     "api.proto",
     "duration.proto",
@@ -19,7 +19,7 @@ pub(crate) static WELL_KNOWN_TYPES_PROTO_FILE_NAMES: &[&str] = &[
     "wrappers.proto",
 ];
 
-pub(crate) static WELL_KNOWN_TYPES_PROTO_FILE_FULL_NAMES: &[&str] = &[
+pub static WELL_KNOWN_TYPES_PROTO_FILE_FULL_NAMES: &[&str] = &[
     "google/protobuf/any.proto",
     "google/protobuf/api.proto",
     "google/protobuf/duration.proto",
@@ -69,7 +69,7 @@ fn is_well_known_type(name: &ProtobufRelPathRef) -> bool {
     NAMES.iter().any(|&n| n == format!("{}", name))
 }
 
-pub(crate) fn is_well_known_type_full(name: &ProtobufAbsPath) -> Option<ProtobufRelPath> {
+pub fn is_well_known_type_full(name: &ProtobufAbsPath) -> Option<ProtobufRelPath> {
     if let Some(rem) = name.remove_prefix(&ProtobufAbsPath::from(".google.protobuf")) {
         if is_well_known_type(rem) {
             Some(rem.to_owned())
@@ -81,7 +81,7 @@ pub(crate) fn is_well_known_type_full(name: &ProtobufAbsPath) -> Option<Protobuf
     }
 }
 
-pub(crate) fn gen_well_known_types_mod() -> compiler_plugin::GenResult {
+pub fn gen_well_known_types_mod() -> compiler_plugin::GenResult {
     let v = CodeWriter::with_no_error(|w| {
         w.comment("This file is generated. Do not edit");
         w.comment("@generated");

@@ -6,7 +6,7 @@ use protobuf::rustproto;
 
 use crate::Customize;
 
-pub(crate) fn customize_from_rustproto_for_message(source: &MessageOptions) -> Customize {
+pub fn customize_from_rustproto_for_message(source: &MessageOptions) -> Customize {
     let before = None;
     let generate_accessors = rustproto::exts::generate_accessors.get(source);
     let generate_getter = rustproto::exts::generate_getter.get(source);
@@ -27,11 +27,11 @@ pub(crate) fn customize_from_rustproto_for_message(source: &MessageOptions) -> C
     }
 }
 
-pub(crate) fn customize_from_rustproto_for_enum(_source: &EnumOptions) -> Customize {
+pub fn customize_from_rustproto_for_enum(_source: &EnumOptions) -> Customize {
     Customize::default()
 }
 
-pub(crate) fn customize_from_rustproto_for_field(source: &FieldOptions) -> Customize {
+pub fn customize_from_rustproto_for_field(source: &FieldOptions) -> Customize {
     let before = None;
     let generate_accessors = rustproto::exts::generate_accessors_field.get(source);
     let generate_getter = rustproto::exts::generate_getter_field.get(source);
@@ -52,7 +52,7 @@ pub(crate) fn customize_from_rustproto_for_field(source: &FieldOptions) -> Custo
     }
 }
 
-pub(crate) fn customize_from_rustproto_for_file(source: &FileOptions) -> Customize {
+pub fn customize_from_rustproto_for_file(source: &FileOptions) -> Customize {
     let before = None;
     let generate_accessors = rustproto::exts::generate_accessors_all.get(source);
     let generate_getter = rustproto::exts::generate_getter_all.get(source);

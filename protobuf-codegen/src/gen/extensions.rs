@@ -96,7 +96,7 @@ impl<'a> ExtGen<'a> {
     }
 }
 
-pub(crate) fn write_extensions(
+pub fn write_extensions(
     file: &FileDescriptor,
     root_scope: &RootScope,
     w: &mut CodeWriter,

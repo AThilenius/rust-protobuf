@@ -32,7 +32,7 @@ use crate::gen::scope::WithScope;
 
 // oneof one { ... }
 #[derive(Clone)]
-pub(crate) struct OneofField<'a> {
+pub struct OneofField<'a> {
     pub elem: FieldElem<'a>,
     pub oneof_variant_rust_name: RustIdent,
     pub oneof_field_name: RustIdent,
@@ -112,7 +112,7 @@ impl<'a> OneofField<'a> {
 }
 
 #[derive(Clone)]
-pub(crate) struct OneofVariantGen<'a> {
+pub struct OneofVariantGen<'a> {
     oneof: &'a OneofGen<'a>,
     _variant: OneofVariantWithContext<'a>,
     oneof_field: OneofField<'a>,
@@ -157,12 +157,12 @@ impl<'a> OneofVariantGen<'a> {
         ))
     }
 
-    pub(crate) fn elem(&self) -> &FieldElem<'_> {
+    pub fn elem(&self) -> &FieldElem<'_> {
         self.field.elem()
     }
 }
 
-pub(crate) struct OneofGen<'a> {
+pub struct OneofGen<'a> {
     // Message containing this oneof
     message: &'a MessageGen<'a>,
     pub oneof: OneofWithContext<'a>,

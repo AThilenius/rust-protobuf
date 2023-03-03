@@ -6,7 +6,7 @@ use crate::gen::rust::rel_path::RustRelativePath;
 
 /// Valid Rust identifier
 #[derive(Eq, PartialEq, Debug, Clone, Hash)]
-pub(crate) struct RustIdent(String);
+pub struct RustIdent(String);
 
 impl RustIdent {
     pub fn new(s: &str) -> RustIdent {
@@ -19,7 +19,7 @@ impl RustIdent {
         RustIdent(s.to_owned())
     }
 
-    pub(crate) fn get(&self) -> &str {
+    pub fn get(&self) -> &str {
         &self.0
     }
 
@@ -31,7 +31,7 @@ impl RustIdent {
         RustIdentWithPath::from(&self.0)
     }
 
-    pub(crate) fn into_rel_path(self) -> RustRelativePath {
+    pub fn into_rel_path(self) -> RustRelativePath {
         RustRelativePath::from_idents([self])
     }
 }

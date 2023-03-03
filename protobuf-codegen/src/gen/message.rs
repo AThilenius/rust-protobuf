@@ -32,7 +32,7 @@ use crate::Customize;
 
 /// Protobuf message Rust type name
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) struct RustTypeMessage(pub RustIdentWithPath);
+pub struct RustTypeMessage(pub RustIdentWithPath);
 
 impl fmt::Display for RustTypeMessage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -58,7 +58,7 @@ impl RustTypeMessage {
 }
 
 /// Message info for codegen
-pub(crate) struct MessageGen<'a> {
+pub struct MessageGen<'a> {
     file_descriptor: &'a FileDescriptor,
     message_descriptor: MessageDescriptor,
     pub message: &'a MessageWithScope<'a>,
@@ -780,7 +780,7 @@ impl<'a> MessageGen<'a> {
     }
 }
 
-pub(crate) fn message_name_to_nested_mod_name(message_name: &str) -> RustIdent {
+pub fn message_name_to_nested_mod_name(message_name: &str) -> RustIdent {
     let mod_name = snake_case(message_name);
     RustIdent::new(&mod_name)
 }

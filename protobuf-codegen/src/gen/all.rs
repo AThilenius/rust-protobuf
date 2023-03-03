@@ -14,7 +14,7 @@ use crate::gen::scope::RootScope;
 use crate::gen::well_known_types::gen_well_known_types_mod;
 use crate::Customize;
 
-pub(crate) fn gen_all(
+pub fn gen_all(
     file_descriptors: &[FileDescriptorProto],
     parser: &str,
     files_to_generate: &[ProtoPathBuf],

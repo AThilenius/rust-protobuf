@@ -3,7 +3,7 @@ use protobuf::descriptor::field_descriptor_proto::Type;
 use crate::gen::rust_types_values::PrimitiveTypeVariant;
 use crate::gen::rust_types_values::RustType;
 
-pub(crate) trait TypeExt {
+pub trait TypeExt {
     fn read(&self, is: &str, primitive_type_variant: PrimitiveTypeVariant) -> String;
     fn is_s_varint(&self) -> bool;
     fn is_copy(&self) -> bool;

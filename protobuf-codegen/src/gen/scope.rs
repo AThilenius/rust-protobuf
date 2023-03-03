@@ -23,7 +23,7 @@ use crate::gen::rust::ident_with_path::RustIdentWithPath;
 use crate::gen::rust::rel_path::RustRelativePath;
 use crate::gen::strx::capitalize;
 
-pub(crate) struct RootScope<'a> {
+pub struct RootScope<'a> {
     pub file_descriptors: &'a [FileDescriptor],
 }
 
@@ -65,7 +65,7 @@ impl<'a> RootScope<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct FileScope<'a> {
+pub struct FileScope<'a> {
     pub file_descriptor: &'a FileDescriptor,
 }
 
@@ -153,13 +153,13 @@ impl<'a> FileScope<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct Scope<'a> {
+pub struct Scope<'a> {
     pub file_scope: FileScope<'a>,
     pub path: Vec<MessageDescriptor>,
 }
 
 impl<'a> Scope<'a> {
-    pub(crate) fn file_descriptor(&self) -> FileDescriptor {
+    pub fn file_descriptor(&self) -> FileDescriptor {
         self.file_scope.file_descriptor.clone()
     }
 
@@ -285,7 +285,7 @@ impl<'a> Scope<'a> {
     }
 }
 
-pub(crate) trait WithScope<'a> {
+pub trait WithScope<'a> {
     fn scope(&self) -> &Scope<'a>;
 
     fn file_descriptor(&self) -> FileDescriptor {
@@ -337,7 +337,7 @@ pub(crate) trait WithScope<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct MessageWithScope<'a> {
+pub struct MessageWithScope<'a> {
     pub scope: Scope<'a>,
     pub message: MessageDescriptor,
 }
@@ -395,7 +395,7 @@ impl<'a> MessageWithScope<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct EnumWithScope<'a> {
+pub struct EnumWithScope<'a> {
     pub scope: Scope<'a>,
     pub en: EnumDescriptor,
 }
@@ -422,7 +422,7 @@ impl<'a> EnumWithScope<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct EnumValueWithContext<'a> {
+pub struct EnumValueWithContext<'a> {
     pub en: EnumWithScope<'a>,
     pub proto: EnumValueDescriptor,
 }
@@ -444,7 +444,7 @@ impl<'a> WithScope<'a> for EnumWithScope<'a> {
     }
 }
 
-pub(crate) enum MessageOrEnumWithScope<'a> {
+pub enum MessageOrEnumWithScope<'a> {
     Message(MessageWithScope<'a>),
     Enum(EnumWithScope<'a>),
 }
@@ -466,7 +466,7 @@ impl<'a> WithScope<'a> for MessageOrEnumWithScope<'a> {
 }
 
 #[derive(Clone)]
-pub(crate) struct FieldWithContext<'a> {
+pub struct FieldWithContext<'a> {
     pub field: FieldDescriptor,
     pub message: MessageWithScope<'a>,
 }
@@ -496,13 +496,13 @@ impl<'a> FieldWithContext<'a> {
 }
 
 #[derive(Clone)]
-pub(crate) struct OneofVariantWithContext<'a> {
+pub struct OneofVariantWithContext<'a> {
     pub oneof: &'a OneofWithContext<'a>,
     pub field: FieldDescriptor,
 }
 
 #[derive(Clone)]
-pub(crate) struct OneofWithContext<'a> {
+pub struct OneofWithContext<'a> {
     pub oneof: OneofDescriptor,
     pub message: MessageWithScope<'a>,
 }

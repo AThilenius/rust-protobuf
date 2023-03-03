@@ -134,7 +134,7 @@
 mod codegen;
 mod compiler_plugin;
 mod customize;
-mod gen;
+pub mod gen;
 pub mod gen_and_write;
 pub mod protoc_gen_rust;
 

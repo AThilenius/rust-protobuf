@@ -19,7 +19,7 @@ use crate::gen::scope::RootScope;
 use crate::gen::scope::WithScope;
 
 #[derive(Clone)]
-pub(crate) struct EnumValueGen<'a> {
+pub struct EnumValueGen<'a> {
     value: EnumValueWithContext<'a>,
     enum_rust_name: RustIdentWithPath,
 }
@@ -53,7 +53,7 @@ impl<'a> EnumValueGen<'a> {
 }
 
 // Codegen for enum definition
-pub(crate) struct EnumGen<'a> {
+pub struct EnumGen<'a> {
     enum_with_scope: &'a EnumWithScope<'a>,
     type_name: RustIdentWithPath,
     lite_runtime: bool,

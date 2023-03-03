@@ -8,7 +8,7 @@ use crate::gen::scope::Scope;
 use crate::Customize;
 
 /// Abstract message or enum descriptor.
-pub(crate) trait Descriptor {
+pub trait Descriptor {
     const DESCRIPTOR_FN: &'static str;
     const TYPE_NAME: &'static str;
     const GET_BY_RELATIVE_NAME_NAME: &'static str;
@@ -35,7 +35,7 @@ impl Descriptor for EnumDescriptor {
     }
 }
 
-pub(crate) fn write_fn_descriptor<D: Descriptor>(
+pub fn write_fn_descriptor<D: Descriptor>(
     descriptor: &D,
     scope: &Scope,
     customize: &Customize,

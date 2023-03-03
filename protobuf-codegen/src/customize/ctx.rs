@@ -10,10 +10,10 @@ use crate::customize::CustomizeCallback;
 use crate::Customize;
 
 #[derive(Clone)]
-pub(crate) struct CustomizeElemCtx<'a> {
-    pub(crate) for_elem: Customize,
-    pub(crate) for_children: Customize,
-    pub(crate) callback: &'a dyn CustomizeCallback,
+pub struct CustomizeElemCtx<'a> {
+    pub for_elem: Customize,
+    pub for_children: Customize,
+    pub callback: &'a dyn CustomizeCallback,
 }
 
 impl<'a> fmt::Debug for CustomizeElemCtx<'a> {
@@ -26,7 +26,7 @@ impl<'a> fmt::Debug for CustomizeElemCtx<'a> {
 }
 
 impl<'a> CustomizeElemCtx<'a> {
-    pub(crate) fn child(
+    pub fn child(
         &self,
         elem_from_rustproto: &Customize,
         elem_descriptor: &impl DescriptorForCustomize,
@@ -46,7 +46,7 @@ impl<'a> CustomizeElemCtx<'a> {
     }
 }
 
-pub(crate) trait DescriptorForCustomize {
+pub trait DescriptorForCustomize {
     fn customize(&self, callback: &dyn CustomizeCallback) -> Customize;
 }
 
@@ -80,9 +80,9 @@ impl DescriptorForCustomize for FileDescriptor {
     }
 }
 
-pub(crate) struct SpecialFieldPseudoDescriptor<'a> {
-    pub(crate) message: &'a MessageDescriptor,
-    pub(crate) field: &'a str,
+pub struct SpecialFieldPseudoDescriptor<'a> {
+    pub message: &'a MessageDescriptor,
+    pub field: &'a str,
 }
 
 impl<'a> DescriptorForCustomize for SpecialFieldPseudoDescriptor<'a> {

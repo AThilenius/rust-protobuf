@@ -15,7 +15,7 @@ fn ident_continue(c: char) -> bool {
     (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_'
 }
 
-pub(crate) fn proto_path_to_rust_mod(path: &str) -> RustIdent {
+pub fn proto_path_to_rust_mod(path: &str) -> RustIdent {
     let without_dir = strx::remove_to(path, std::path::is_separator);
     let without_suffix = strx::remove_suffix(without_dir, ".proto");
 
@@ -44,10 +44,7 @@ pub fn proto_name_to_rs(proto_file_path: &str) -> String {
     format!("{}.rs", proto_path_to_rust_mod(proto_file_path))
 }
 
-pub(crate) fn proto_path_to_fn_file_descriptor(
-    proto_path: &str,
-    customize: &Customize,
-) -> RustPath {
+pub fn proto_path_to_fn_file_descriptor(proto_path: &str, customize: &Customize) -> RustPath {
     let protobuf_crate = protobuf_crate_path(customize);
     match proto_path {
         "rustproto.proto" => protobuf_crate.append("rustproto::file_descriptor".into()),

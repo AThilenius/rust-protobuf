@@ -25,22 +25,22 @@ impl RepeatedFieldKind {
 }
 
 #[derive(Clone)]
-pub(crate) struct RepeatedField<'a> {
+pub struct RepeatedField<'a> {
     pub elem: FieldElem<'a>,
     pub packed: bool,
 }
 
 impl<'a> RepeatedField<'a> {
-    pub(crate) fn kind(&self) -> RepeatedFieldKind {
+    pub fn kind(&self) -> RepeatedFieldKind {
         RepeatedFieldKind::Vec
     }
 
-    pub(crate) fn rust_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn rust_type(&self, reference: &FileAndMod) -> RustType {
         self.kind()
             .wrap_element(self.elem.rust_storage_elem_type(reference))
     }
 
-    pub(crate) fn default(&self) -> String {
+    pub fn default(&self) -> String {
         self.kind().default()
     }
 }

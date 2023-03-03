@@ -6,9 +6,9 @@ use crate::gen::rust::ident_with_path::RustIdentWithPath;
 use crate::gen::rust::rel_path::RustRelativePath;
 
 #[derive(Default, Eq, PartialEq, Debug, Clone)]
-pub(crate) struct RustPath {
-    pub(crate) absolute: bool,
-    pub(crate) path: RustRelativePath,
+pub struct RustPath {
+    pub absolute: bool,
+    pub path: RustRelativePath,
 }
 
 impl RustPath {
@@ -50,7 +50,7 @@ impl RustPath {
         }
     }
 
-    pub(crate) fn append_component(mut self, component: RustPathComponent) -> RustPath {
+    pub fn append_component(mut self, component: RustPathComponent) -> RustPath {
         self.path.path.push(component);
         self
     }

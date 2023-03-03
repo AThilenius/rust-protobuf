@@ -130,7 +130,7 @@ fn write_file_descriptor(
     );
 }
 
-pub(crate) fn write_file_descriptor_data(
+pub fn write_file_descriptor_data(
     file: &FileDescriptor,
     customize: &Customize,
     w: &mut CodeWriter,
@@ -197,7 +197,7 @@ fn write_file_descriptor_proto(customize: &Customize, w: &mut CodeWriter) {
 }
 
 /// Code to generate call `module::file_descriptor()`.
-pub(crate) fn file_descriptor_call_expr(scope: &Scope) -> String {
+pub fn file_descriptor_call_expr(scope: &Scope) -> String {
     format!(
         "{}()",
         scope

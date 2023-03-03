@@ -26,7 +26,7 @@ use crate::gen::well_known_types::is_well_known_type_full;
 
 // Represent subset of rust types used in generated code
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum RustType {
+pub enum RustType {
     // integer: signed?, size in bits
     Int(bool, u32),
     // param is size in bits
@@ -63,7 +63,7 @@ pub(crate) enum RustType {
 
 impl RustType {
     #[inline]
-    pub(crate) fn to_code(&self, customize: &Customize) -> String {
+    pub fn to_code(&self, customize: &Customize) -> String {
         match *self {
             RustType::Int(true, bits) => format!("i{}", bits),
             RustType::Int(false, bits) => format!("u{}", bits),
@@ -103,26 +103,26 @@ impl RustType {
 }
 
 impl RustType {
-    pub(crate) fn u8() -> RustType {
+    pub fn u8() -> RustType {
         RustType::Int(false, 8)
     }
 
-    pub(crate) fn i32() -> RustType {
+    pub fn i32() -> RustType {
         RustType::Int(true, 32)
     }
 
     /// `&str`.
-    pub(crate) fn amp_str() -> RustType {
+    pub fn amp_str() -> RustType {
         RustType::Str.wrap_ref()
     }
 
     /// `&[u8]`.
-    pub(crate) fn amp_slice_of_u8() -> RustType {
+    pub fn amp_slice_of_u8() -> RustType {
         RustType::u8().wrap_slice().wrap_ref()
     }
 
     /// Type is rust primitive?
-    pub(crate) fn is_primitive(&self) -> bool {
+    pub fn is_primitive(&self) -> bool {
         match *self {
             RustType::Int(..) | RustType::Float(..) | RustType::Bool => true,
             _ => false,
@@ -391,11 +391,11 @@ impl RustType {
         }))
     }
 
-    pub(crate) fn wrap_ref(&self) -> RustType {
+    pub fn wrap_ref(&self) -> RustType {
         RustType::Ref(Box::new(self.clone()))
     }
 
-    pub(crate) fn wrap_slice(&self) -> RustType {
+    pub fn wrap_slice(&self) -> RustType {
         RustType::Slice(Box::new(self.clone()))
     }
 
@@ -426,7 +426,7 @@ impl RustType {
 }
 
 /// Representation of an expression in code generator: text and type
-pub(crate) struct RustValueTyped {
+pub struct RustValueTyped {
     pub value: String,
     pub rust_type: RustType,
 }
@@ -478,11 +478,11 @@ fn make_path_to_path(source: &RustRelativePath, dest: &RustPath) -> RustPath {
     source.to_reverse().into_path().append(dest)
 }
 
-pub(crate) fn make_path(source: &RustRelativePath, dest: &RustIdentWithPath) -> RustIdentWithPath {
+pub fn make_path(source: &RustRelativePath, dest: &RustIdentWithPath) -> RustIdentWithPath {
     make_path_to_path(source, &dest.path).with_ident(dest.ident.clone())
 }
 
-pub(crate) fn message_or_enum_to_rust_relative(
+pub fn message_or_enum_to_rust_relative(
     message_or_enum: &dyn WithScope,
     current: &FileAndMod,
 ) -> RustIdentWithPath {
@@ -522,7 +522,7 @@ pub(crate) fn message_or_enum_to_rust_relative(
     }
 }
 
-pub(crate) fn type_name_to_rust_relative(
+pub fn type_name_to_rust_relative(
     type_name: &ProtobufAbsPath,
     current: &FileAndMod,
     root_scope: &RootScope,
@@ -544,14 +544,14 @@ pub enum _TokioBytesType {
 }
 
 // ProtobufType trait name
-pub(crate) enum ProtobufTypeGen {
+pub enum ProtobufTypeGen {
     Primitive(field_descriptor_proto::Type, PrimitiveTypeVariant),
     Message(RustTypeMessage),
     EnumOrUnknown(RustIdentWithPath),
 }
 
 impl ProtobufTypeGen {
-    pub(crate) fn protobuf_value(&self, customize: &Customize) -> String {
+    pub fn protobuf_value(&self, customize: &Customize) -> String {
         match self {
             ProtobufTypeGen::Primitive(t, PrimitiveTypeVariant::Default) => {
                 t.rust_type().to_code(customize)
@@ -565,7 +565,7 @@ impl ProtobufTypeGen {
         }
     }
 
-    pub(crate) fn _rust_type(&self, customize: &Customize) -> String {
+    pub fn _rust_type(&self, customize: &Customize) -> String {
         match self {
             &ProtobufTypeGen::Primitive(t, PrimitiveTypeVariant::Default) => format!(
                 "{}::reflect::types::ProtobufType{}",

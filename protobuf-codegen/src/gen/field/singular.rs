@@ -25,13 +25,13 @@ impl SingularFieldFlag {
 }
 
 #[derive(Clone)]
-pub(crate) struct SingularField<'a> {
+pub struct SingularField<'a> {
     pub flag: SingularFieldFlag,
     pub elem: FieldElem<'a>,
 }
 
 impl<'a> SingularField<'a> {
-    pub(crate) fn rust_storage_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn rust_storage_type(&self, reference: &FileAndMod) -> RustType {
         match self.flag {
             SingularFieldFlag::WithFlag { option_kind, .. } => {
                 option_kind.wrap_element(self.elem.rust_storage_elem_type(reference))
@@ -40,7 +40,7 @@ impl<'a> SingularField<'a> {
         }
     }
 
-    pub(crate) fn default_value(
+    pub fn default_value(
         &self,
         customize: &Customize,
         reference: &FileAndMod,

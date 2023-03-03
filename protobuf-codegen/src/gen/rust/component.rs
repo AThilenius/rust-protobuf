@@ -5,7 +5,7 @@ use crate::gen::rust::ident::RustIdent;
 use crate::gen::rust::keywords::parse_rust_keyword;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub(crate) enum RustPathComponent {
+pub enum RustPathComponent {
     Ident(RustIdent),
     Keyword(&'static str),
 }
@@ -20,9 +20,9 @@ impl fmt::Display for RustPathComponent {
 }
 
 impl RustPathComponent {
-    pub(crate) const SUPER: RustPathComponent = RustPathComponent::Keyword("super");
+    pub const SUPER: RustPathComponent = RustPathComponent::Keyword("super");
 
-    pub(crate) fn parse(s: &str) -> RustPathComponent {
+    pub fn parse(s: &str) -> RustPathComponent {
         if s.starts_with("r#") {
             RustPathComponent::Ident(RustIdent::new(&s[2..]))
         } else if let Some(kw) = parse_rust_keyword(s) {

@@ -18,7 +18,7 @@ fn write_protoc_insertion_point(w: &mut CodeWriter, customize: &Customize, arg: 
     w.comment(&format!("@@protoc_insertion_point({})", arg));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_message(
+pub fn write_protoc_insertion_point_for_message(
     w: &mut CodeWriter,
     customize: &Customize,
     message: &MessageDescriptor,
@@ -26,7 +26,7 @@ pub(crate) fn write_protoc_insertion_point_for_message(
     write_protoc_insertion_point(w, customize, &format!("message:{}", message.full_name()));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_field(
+pub fn write_protoc_insertion_point_for_field(
     w: &mut CodeWriter,
     customize: &Customize,
     field: &FieldDescriptor,
@@ -34,7 +34,7 @@ pub(crate) fn write_protoc_insertion_point_for_field(
     write_protoc_insertion_point(w, customize, &format!("field:{}", field.full_name()));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_special_field(
+pub fn write_protoc_insertion_point_for_special_field(
     w: &mut CodeWriter,
     customize: &Customize,
     message: &MessageDescriptor,
@@ -47,7 +47,7 @@ pub(crate) fn write_protoc_insertion_point_for_special_field(
     );
 }
 
-pub(crate) fn write_protoc_insertion_point_for_enum(
+pub fn write_protoc_insertion_point_for_enum(
     w: &mut CodeWriter,
     customize: &Customize,
     enumeration: &EnumDescriptor,
@@ -55,7 +55,7 @@ pub(crate) fn write_protoc_insertion_point_for_enum(
     write_protoc_insertion_point(w, customize, &format!("enum:{}", enumeration.full_name()));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_enum_value(
+pub fn write_protoc_insertion_point_for_enum_value(
     w: &mut CodeWriter,
     customize: &Customize,
     value: &EnumValueDescriptor,
@@ -63,7 +63,7 @@ pub(crate) fn write_protoc_insertion_point_for_enum_value(
     write_protoc_insertion_point(w, customize, &format!("enum_value:{}", value.full_name()));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_oneof(
+pub fn write_protoc_insertion_point_for_oneof(
     w: &mut CodeWriter,
     customize: &Customize,
     oneof: &OneofDescriptor,
@@ -71,7 +71,7 @@ pub(crate) fn write_protoc_insertion_point_for_oneof(
     write_protoc_insertion_point(w, customize, &format!("oneof:{}", oneof.full_name()));
 }
 
-pub(crate) fn write_protoc_insertion_point_for_oneof_field(
+pub fn write_protoc_insertion_point_for_oneof_field(
     w: &mut CodeWriter,
     customize: &Customize,
     field: &FieldDescriptor,

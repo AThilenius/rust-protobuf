@@ -68,16 +68,16 @@ static RUST_KEYWORDS_WHICH_CANNOT_BE_RAW: &'static [&'static str] = &[
     "crate",
 ];
 
-pub(crate) fn parse_rust_keyword(word: &str) -> Option<&'static str> {
+pub fn parse_rust_keyword(word: &str) -> Option<&'static str> {
     RUST_KEYWORDS.iter().cloned().find(|&kw| kw == word)
 }
 
-pub(crate) fn is_rust_keyword(ident: &str) -> bool {
+pub fn is_rust_keyword(ident: &str) -> bool {
     parse_rust_keyword(ident).is_some()
 }
 
 #[allow(dead_code)]
-pub(crate) fn is_rust_keyword_which_cannot_be_raw(ident: &str) -> bool {
+pub fn is_rust_keyword_which_cannot_be_raw(ident: &str) -> bool {
     RUST_KEYWORDS_WHICH_CANNOT_BE_RAW
         .iter()
         .cloned()

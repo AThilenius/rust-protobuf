@@ -21,7 +21,7 @@ use crate::gen::scope::RootScope;
 use crate::Customize;
 
 #[derive(Clone, Debug)]
-pub(crate) struct FieldElemEnum<'a> {
+pub struct FieldElemEnum<'a> {
     /// Enum default value variant, either from proto or from enum definition
     default_value: EnumValueWithContext<'a>,
 }
@@ -31,7 +31,7 @@ impl<'a> FieldElemEnum<'a> {
         message_or_enum_to_rust_relative(&self.default_value.en, reference)
     }
 
-    pub(crate) fn enum_rust_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn enum_rust_type(&self, reference: &FileAndMod) -> RustType {
         RustType::Enum(
             self.rust_name_relative(reference),
             self.default_value.rust_name(),
@@ -47,7 +47,7 @@ impl<'a> FieldElemEnum<'a> {
         )
     }
 
-    pub(crate) fn default_value_rust_expr(&self, reference: &FileAndMod) -> RustIdentWithPath {
+    pub fn default_value_rust_expr(&self, reference: &FileAndMod) -> RustIdentWithPath {
         self.rust_name_relative(reference)
             .to_path()
             .with_ident(self.default_value.rust_name())
@@ -55,12 +55,12 @@ impl<'a> FieldElemEnum<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) struct FieldElemMessage<'a> {
+pub struct FieldElemMessage<'a> {
     pub message: MessageWithScope<'a>,
 }
 
 impl<'a> FieldElemMessage<'a> {
-    pub(crate) fn rust_name_relative(&self, reference: &FileAndMod) -> RustTypeMessage {
+    pub fn rust_name_relative(&self, reference: &FileAndMod) -> RustTypeMessage {
         RustTypeMessage(message_or_enum_to_rust_relative(&self.message, reference))
     }
 
@@ -70,20 +70,20 @@ impl<'a> FieldElemMessage<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub(crate) enum FieldElem<'a> {
+pub enum FieldElem<'a> {
     Primitive(Type, PrimitiveTypeVariant),
     Message(FieldElemMessage<'a>),
     Enum(FieldElemEnum<'a>),
     Group,
 }
 
-pub(crate) enum HowToGetMessageSize {
+pub enum HowToGetMessageSize {
     Compute,
     GetCached,
 }
 
 impl<'a> FieldElem<'a> {
-    pub(crate) fn proto_type(&self) -> Type {
+    pub fn proto_type(&self) -> Type {
         match *self {
             FieldElem::Primitive(t, ..) => t,
             FieldElem::Group => Type::TYPE_GROUP,
@@ -92,11 +92,11 @@ impl<'a> FieldElem<'a> {
         }
     }
 
-    pub(crate) fn is_copy(&self) -> bool {
+    pub fn is_copy(&self) -> bool {
         self.proto_type().is_copy()
     }
 
-    pub(crate) fn rust_storage_elem_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn rust_storage_elem_type(&self, reference: &FileAndMod) -> RustType {
         match *self {
             FieldElem::Primitive(t, PrimitiveTypeVariant::Default) => t.rust_type(),
             FieldElem::Primitive(Type::TYPE_STRING, PrimitiveTypeVariant::TokioBytes) => {
@@ -113,7 +113,7 @@ impl<'a> FieldElem<'a> {
     }
 
     // Type of set_xxx function parameter type for singular fields
-    pub(crate) fn rust_set_xxx_param_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn rust_set_xxx_param_type(&self, reference: &FileAndMod) -> RustType {
         if let FieldElem::Enum(ref en) = *self {
             en.enum_rust_type(reference)
         } else {
@@ -121,14 +121,14 @@ impl<'a> FieldElem<'a> {
         }
     }
 
-    pub(crate) fn primitive_type_variant(&self) -> PrimitiveTypeVariant {
+    pub fn primitive_type_variant(&self) -> PrimitiveTypeVariant {
         match self {
             &FieldElem::Primitive(_, v) => v,
             _ => PrimitiveTypeVariant::Default,
         }
     }
 
-    pub(crate) fn singular_field_size(
+    pub fn singular_field_size(
         &self,
         field_number: u32,
         var: &RustValueTyped,
@@ -187,7 +187,7 @@ impl<'a> FieldElem<'a> {
         }
     }
 
-    pub(crate) fn write_element_size(
+    pub fn write_element_size(
         &self,
         field_number: u32,
         item_var: &RustValueTyped,
@@ -222,7 +222,7 @@ impl<'a> FieldElem<'a> {
         }
     }
 
-    pub(crate) fn write_write_element(
+    pub fn write_write_element(
         &self,
         field_number: u32,
         v: &RustValueTyped,
@@ -257,7 +257,7 @@ impl<'a> FieldElem<'a> {
         }
     }
 
-    pub(crate) fn read_one_liner(&self) -> String {
+    pub fn read_one_liner(&self) -> String {
         format!(
             "{}?",
             self.proto_type().read("is", self.primitive_type_variant())
@@ -265,7 +265,7 @@ impl<'a> FieldElem<'a> {
     }
 }
 
-pub(crate) fn field_elem<'a>(
+pub fn field_elem<'a>(
     field: &FieldWithContext,
     root_scope: &'a RootScope<'a>,
     customize: &Customize,

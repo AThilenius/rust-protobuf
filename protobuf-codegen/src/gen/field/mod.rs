@@ -1,10 +1,10 @@
 mod accessor;
-pub(crate) mod elem;
+pub mod elem;
 mod option_kind;
 mod repeated;
 mod singular;
 mod tag;
-pub(crate) mod type_ext;
+pub mod type_ext;
 
 use protobuf::descriptor::field_descriptor_proto::Type;
 use protobuf::descriptor::*;
@@ -63,7 +63,7 @@ pub struct MapField<'a> {
 }
 
 #[derive(Clone)]
-pub(crate) enum FieldKind<'a> {
+pub enum FieldKind<'a> {
     // optional or required
     Singular(SingularField<'a>),
     // repeated except map
@@ -75,7 +75,7 @@ pub(crate) enum FieldKind<'a> {
 }
 
 impl<'a> FieldKind<'a> {
-    pub(crate) fn default(
+    pub fn default(
         &self,
         customize: &Customize,
         reference: &FileAndMod,
@@ -91,7 +91,7 @@ impl<'a> FieldKind<'a> {
 }
 
 #[derive(Clone)]
-pub(crate) enum SingularOrOneofField<'a> {
+pub enum SingularOrOneofField<'a> {
     Singular(SingularField<'a>),
     Oneof(OneofField<'a>),
 }
@@ -105,7 +105,7 @@ impl<'a> SingularOrOneofField<'a> {
     }
 
     // Type of `xxx` function for singular type.
-    pub(crate) fn getter_return_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn getter_return_type(&self, reference: &FileAndMod) -> RustType {
         let elem = self.elem();
         if let FieldElem::Enum(ref en) = elem {
             en.enum_rust_type(reference)
@@ -122,7 +122,7 @@ impl<'a> SingularOrOneofField<'a> {
 pub struct EntryKeyValue<'a>(FieldElem<'a>, FieldElem<'a>);
 
 #[derive(Clone)]
-pub(crate) struct FieldGen<'a> {
+pub struct FieldGen<'a> {
     syntax: Syntax,
     pub proto_field: FieldWithContext<'a>,
     // field name in generated code
@@ -138,7 +138,7 @@ pub(crate) struct FieldGen<'a> {
 }
 
 impl<'a> FieldGen<'a> {
-    pub(crate) fn parse(
+    pub fn parse(
         field: FieldWithContext<'a>,
         root_scope: &'a RootScope<'a>,
         parent_customize: &CustomizeElemCtx<'a>,
@@ -261,7 +261,7 @@ impl<'a> FieldGen<'a> {
         }
     }
 
-    pub(crate) fn elem(&self) -> &FieldElem {
+    pub fn elem(&self) -> &FieldElem {
         match self.kind {
             FieldKind::Singular(SingularField { ref elem, .. }) => &elem,
             FieldKind::Repeated(RepeatedField { ref elem, .. }) => &elem,
@@ -271,7 +271,7 @@ impl<'a> FieldGen<'a> {
     }
 
     // type of field in struct
-    pub(crate) fn full_storage_type(&self, reference: &FileAndMod) -> RustType {
+    pub fn full_storage_type(&self, reference: &FileAndMod) -> RustType {
         match self.kind {
             FieldKind::Repeated(ref repeated) => repeated.rust_type(reference),
             FieldKind::Map(MapField {
@@ -356,7 +356,7 @@ impl<'a> FieldGen<'a> {
     }
 
     // elem data is not stored in heap
-    pub(crate) fn elem_type_is_copy(&self) -> bool {
+    pub fn elem_type_is_copy(&self) -> bool {
         self.proto_type.is_copy()
     }
 
@@ -467,7 +467,7 @@ impl<'a> FieldGen<'a> {
         }
     }
 
-    pub(crate) fn reconstruct_def(&self) -> String {
+    pub fn reconstruct_def(&self) -> String {
         let prefix = match (self.proto_field.field.proto().label(), self.syntax) {
             (field_descriptor_proto::Label::LABEL_REPEATED, _) => "repeated ",
             (_, Syntax::Proto3) => "",
@@ -483,7 +483,7 @@ impl<'a> FieldGen<'a> {
         )
     }
 
-    pub(crate) fn write_clear(&self, w: &mut CodeWriter) {
+    pub fn write_clear(&self, w: &mut CodeWriter) {
         match self.kind {
             FieldKind::Oneof(ref o) => {
                 w.write_line(&format!(
@@ -507,7 +507,7 @@ impl<'a> FieldGen<'a> {
     }
 
     // output code that writes single element to stream
-    pub(crate) fn write_write_element(
+    pub fn write_write_element(
         &self,
         elem: &FieldElem,
         w: &mut CodeWriter,
@@ -568,7 +568,7 @@ impl<'a> FieldGen<'a> {
         as_option_type.value(format!("{}.as_ref()", self.self_field()))
     }
 
-    pub(crate) fn write_struct_field(&self, w: &mut CodeWriter) {
+    pub fn write_struct_field(&self, w: &mut CodeWriter) {
         if self.proto_type == field_descriptor_proto::Type::TYPE_GROUP {
             w.comment(&format!("{}: <group>", &self.rust_name));
         } else {
@@ -680,7 +680,7 @@ impl<'a> FieldGen<'a> {
         }
     }
 
-    pub(crate) fn write_if_self_field_is_none<F>(&self, w: &mut CodeWriter, cb: F)
+    pub fn write_if_self_field_is_none<F>(&self, w: &mut CodeWriter, cb: F)
     where
         F: Fn(&mut CodeWriter),
     {
@@ -689,7 +689,7 @@ impl<'a> FieldGen<'a> {
     }
 
     // repeated or singular
-    pub(crate) fn write_for_self_field<F>(&self, w: &mut CodeWriter, varn: &str, cb: F)
+    pub fn write_for_self_field<F>(&self, w: &mut CodeWriter, varn: &str, cb: F)
     where
         F: Fn(&mut CodeWriter, &RustType),
     {
@@ -886,7 +886,7 @@ impl<'a> FieldGen<'a> {
         )
     }
 
-    pub(crate) fn clear_field_func(&self) -> String {
+    pub fn clear_field_func(&self) -> String {
         format!("clear_{}", self.rust_name)
     }
 
@@ -1068,7 +1068,7 @@ impl<'a> FieldGen<'a> {
     }
 
     /// Write `merge_from` part for this field
-    pub(crate) fn write_merge_from_field_case_block(&self, w: &mut CodeWriter) {
+    pub fn write_merge_from_field_case_block(&self, w: &mut CodeWriter) {
         match &self.kind {
             FieldKind::Oneof(oneof) => self.write_merge_from_oneof_case_block(oneof, w),
             FieldKind::Map(map) => self.write_merge_from_map_case_block(map, w),
@@ -1077,7 +1077,7 @@ impl<'a> FieldGen<'a> {
         }
     }
 
-    pub(crate) fn write_element_size(
+    pub fn write_element_size(
         &self,
         elem: &FieldElem,
         w: &mut CodeWriter,
@@ -1131,7 +1131,7 @@ impl<'a> FieldGen<'a> {
         });
     }
 
-    pub(crate) fn write_message_write_field(&self, os: &str, w: &mut CodeWriter) {
+    pub fn write_message_write_field(&self, os: &str, w: &mut CodeWriter) {
         match &self.kind {
             FieldKind::Singular(s @ SingularField { elem, .. }) => {
                 self.write_if_let_self_field_is_some(s, w, |v, w| {
@@ -1206,7 +1206,7 @@ impl<'a> FieldGen<'a> {
         });
     }
 
-    pub(crate) fn write_message_compute_field_size(&self, sum_var: &str, w: &mut CodeWriter) {
+    pub fn write_message_compute_field_size(&self, sum_var: &str, w: &mut CodeWriter) {
         match &self.kind {
             FieldKind::Singular(s @ SingularField { elem, .. }) => {
                 self.write_if_let_self_field_is_some(s, w, |v, w| {
@@ -1798,7 +1798,7 @@ impl<'a> FieldGen<'a> {
         );
     }
 
-    pub(crate) fn write_message_single_field_accessors(&self, w: &mut CodeWriter) {
+    pub fn write_message_single_field_accessors(&self, w: &mut CodeWriter) {
         if self.generate_accessors || self.generate_getter {
             w.write_line("");
             let reconstruct_def = self.reconstruct_def();
@@ -1840,11 +1840,11 @@ impl<'a> FieldGen<'a> {
     }
 }
 
-pub(crate) fn rust_field_name_for_protobuf_field_name(name: &str) -> RustIdent {
+pub fn rust_field_name_for_protobuf_field_name(name: &str) -> RustIdent {
     RustIdent::new(name)
 }
 
-pub(crate) fn rust_variant_name_for_protobuf_oneof_field_name(name: &str) -> RustIdent {
+pub fn rust_variant_name_for_protobuf_oneof_field_name(name: &str) -> RustIdent {
     let name = camel_case(name);
     RustIdent::new(&name)
 }

@@ -5,7 +5,7 @@ use crate::gen::rust::ident::RustIdent;
 use crate::gen::rust::path::RustPath;
 
 #[derive(Eq, PartialEq, Debug, Clone)]
-pub(crate) struct RustIdentWithPath {
+pub struct RustIdentWithPath {
     pub path: RustPath,
     pub ident: RustIdent,
 }
