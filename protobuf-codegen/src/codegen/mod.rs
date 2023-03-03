@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use std::process;
 
 use anyhow::Context;
+use protobuf_parse::ParsedAndTypechecked;
 use protobuf_parse::Parser;
 
 use crate::customize::CustomizeCallback;
@@ -57,6 +58,11 @@ pub struct Codegen {
     protoc_extra_args: Vec<OsString>,
     /// Capture stderr when running `protoc`.
     capture_stderr: bool,
+}
+
+pub struct CodegenResults {
+    pub parsed: ParsedAndTypechecked,
+    pub out_dir: PathBuf,
 }
 
 impl Codegen {
@@ -213,7 +219,7 @@ impl Codegen {
     ///
     /// This function uses pure Rust parser or `protoc` parser depending on
     /// how this object was configured.
-    pub fn run(&self) -> anyhow::Result<()> {
+    pub fn run(&self) -> anyhow::Result<CodegenResults> {
         let out_dir = match &self.out_dir {
             Some(out_dir) => out_dir,
             None => return Err(CodegenError::OutDirNotSpecified.into()),
@@ -259,7 +265,12 @@ impl Codegen {
             &out_dir,
             &self.customize,
             &*self.customize_callback,
-        )
+        )?;
+
+        Ok(CodegenResults {
+            parsed: parsed_and_typechecked,
+            out_dir: out_dir.clone(),
+        })
     }
 
     /// Similar to `run`, but prints the message to stderr and exits the process on error.
